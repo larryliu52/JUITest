@@ -1,0 +1,10 @@
+1000
+2000
+5000
+8000
+10000
+15000
+20000
+30000
+40000
+--Please choose a preferred mileage
