@@ -52,16 +52,20 @@ public class InventorySearch extends InventorySearchBuild{
         //northPanel.setPreferredSize(new Dimension(500, 500));
         northPanel = new JPanel() {
             public void paintComponent(Graphics g) {
-                ImageIcon backImage = new ImageIcon("//users/liulanze/Downloads/2019 Spring NEU Seattle/JAVA OOP/Final Project/cover1.jpeg");
-                g.drawImage(backImage.getImage(), 0, 0, this.getSize().width, this.getSize().height, this);
+                //ImageIcon backImage = new ImageIcon("//users/liulanze/Downloads/2019 Spring NEU Seattle/JAVA OOP/Final Project/cover1.jpeg");
+                //g.drawImage(backImage.getImage(), 0, 0, this.getSize().width, this.getSize().height, this);
             }
         };
 
-        labelSortBy = new JLabel("Sort by:");
+
+        labelNorthTitle = new JLabel("Welcome to the inventory search page! This page shows the inventory from dealerID " + this.dealerID);
+
+        labelSortBy = new JLabel("                                                                          Sort by:");
         JCBSortBy = new JComboBox(new String[] {"Distance: Nearest(Default)", "Price: Lowest", "Price: Highest", "Year: Newest", "Year: Oldest", "Mileage: Lowest", "Mileage: Highest"});
 
         northPanel.setOpaque(true);
         northPanel.add(Box.createRigidArea(new Dimension(0, 10)));
+        northPanel.add(labelNorthTitle);
         northPanel.add(labelSortBy, BorderLayout.EAST);
         northPanel.add(JCBSortBy, BorderLayout.EAST);
 
