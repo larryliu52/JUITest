@@ -9,37 +9,37 @@ public class FilterContent {
 	private String model;
 	private String type;
 	
-	private String mileage;
+	private double mileage;
 	private String seatCount;
 	
 	private String highPrice;
 	private String lowPrice; 
-	private String highYear;
-	private String lowYear;
-	boolean needNew, needUsed;
+	private int highYear;
+	private int lowYear;
+	boolean needsNew, needsUsed;
 	boolean yearValidate = false, priceValidate = false;
 	public FilterContent() {
 			this.lowPrice = "";
 			this.highPrice = "";
-			this.lowYear = "";
-			this.highYear = "";
+			this.lowYear = 0;
+			this.highYear = 3000;
 			this.make = "";
 			this.model = "";
 			this.type = "";
-			this.mileage = "";
+			this.mileage = 0;
 			this.seatCount = "";
 			this.category = "";
 
-			this.needUsed = true;
-			this.needNew = true;
+			this.needsUsed = true;
+			this.needsNew = true;
 		}
 	
 	//category
 	public String getCategory() {
 	return category;
 		}
-	public void setNeedNew(boolean category) { this.needNew = category; }
-	public void setNeedUsed(boolean category){ this.needUsed = category;}
+	public void setNeedNew(boolean category) { this.needsNew = category; }
+	public void setNeedUsed(boolean category){ this.needsUsed = category;}
 	
 	//make
 	public String getMake(){
@@ -82,26 +82,32 @@ public class FilterContent {
 		}
 	
 	//highYeat
-	public String getHighYear() {
+	public int getHighYear() {
 	return highYear;
 		}
-	public void setHighYear(String highYear) {
-	this.highYear = highYear;
+	public void setHighYear(Object highYear) {
+		if(highYear.equals("--Please choose a year"))
+			this.highYear = 3000;
+		else
+			this.highYear = (int)highYear;
 		}
 	
 	//lowYear
-	public String getLowYear() {
+	public int getLowYear() {
 	return lowYear;
 		}
-	public void setLowYear(String lowYear) {
-	this.lowYear = lowYear;
+	public void setLowYear(Object lowYear) {
+		if(lowYear.equals("--Please choose a year"))
+			this.lowYear = 0;
+		else
+			this.lowYear = (int)lowYear;
 		}
 	
 	//mileage
-	public String getMileage() {
+	public double getMileage() {
 	return mileage;
 		}
-	public void setMileage(String mileage) {
+	public void setMileage(double mileage) {
 	this.mileage = mileage;
 		}
 	
@@ -119,24 +125,24 @@ public class FilterContent {
 	}
 
 	public boolean isValidate(){
-		if(this.getHighYear().equals(yearSetItems.get(yearSetItems.size()-1))) {
-		}
-		else{
-			int startYear=Integer.valueOf(this.getLowYear());
-			int endYear=Integer.valueOf(this.getHighYear());
+
+			int startYear = this.getLowYear();
+			int endYear = this.getHighYear();
 			if (startYear > endYear) {
 				this.yearValidate = false;
 			}
 			else
 				this.yearValidate = true;
-		}
+
 
 		//verify price filter validation
-		if(this.getHighPrice().equals(maxPriceFilterResults.get(maxPriceFilterResults.size()-1))||this.getLowPrice()
-				.equals(minPriceFilterResults.get(minPriceFilterResults.size()-1))) {
-			this.priceValidate = false;
+		if(this.getHighPrice().equals(maxPriceFilterResults.get(maxPriceFilterResults.size()-1))) {
+			this.highPrice = "99999999";
 		}
-		else{
+		if(this.getLowPrice().equals(minPriceFilterResults.get(minPriceFilterResults.size()-1))){
+			this.lowPrice = "0";
+		}
+
 			double startPrice = Double.valueOf(this.getLowPrice().replace("$","").replace(",",""));
 			double endPrice = Double.valueOf(this.getHighPrice().replace("$","").replace(",",""));
 			if (startPrice > endPrice) {
@@ -144,14 +150,14 @@ public class FilterContent {
 			}
 			else
 				this.priceValidate = true;
-		}
+
 
 		//verify mileage filter validation
-		if(this.getMileage().equals(mileageSetItems.get(mileageSetItems.size()-1))) {
-			this.mileage = "";
+		if(this.getMileage()==1000000) {
+			this.mileage = 1000000;
 		}
 
-		if(this.getMake().equals(makeSetItems.get(makeSetItems.size()-1))) {
+		if(this.getMake().equals("--Please choose a preferred make")) {
 			this.make = "";
 		}
 
@@ -167,13 +173,6 @@ public class FilterContent {
 			this.model = "";
 		}
 
-		if(this.priceValidate && this.yearValidate){
-			System.out.println(true);
-			return true;
-		}
-		else {
-			System.out.println(false);
-			return false;
-		}
+		return this.priceValidate && this.yearValidate;
 	}
 }

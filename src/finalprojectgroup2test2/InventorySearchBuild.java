@@ -32,7 +32,9 @@ public class InventorySearchBuild extends JFrame {
     protected List<ResultPanel> resultPanelList;
     protected ArrayList<Vehicle> tempVehicles = new ArrayList<>();
 
-    protected JLabel labelCategory, labelEmpty, labelYear, labelTo, labelTo2, labelMileage, labelOrLess, labelPrice, labelLocation, labelZipcode, labelMake, labelModel, labelType, labelSeatCount, labelSortBy;
+    protected JLabel labelCategory, labelEmpty, labelYear, labelTo, labelTo2,
+                     labelMileage, labelOrLess, labelPrice, labelLocation, labelZipcode,
+                     labelMake, labelModel, labelType, labelSeatCount, labelSortBy, labelNorthTitle;
     protected JCheckBox bottonNew, bottonUsed;
     protected JComboBox JCBYear1, JCBYear2, JCBMileage1, JCBPrice1, JCBPrice2, JCBMake, JCBModel, JCBType, JCBSeatCount, JCBSortBy;
     protected JTextField JTFZipcode;
@@ -40,10 +42,16 @@ public class InventorySearchBuild extends JFrame {
     protected JButton JBBack, JBPreviousPage, JBNextPage, JBSearch;
     
     protected TreeSet<String> modelSetItems = new TreeSet<>();
-    static ArrayList<String> minPriceFilterResults = new ArrayList<>(), mileageSetItems = new ArrayList<>(), yearSetItems = new ArrayList<>(),
-            maxPriceFilterResults = new ArrayList<>(), typeSetItems = new ArrayList<>(), makeSetItems = new ArrayList<>(),
+    static ArrayList<String> minPriceFilterResults = new ArrayList<>(), maxPriceFilterResults = new ArrayList<>(),
+            typeSetItems = new ArrayList<>(), makeSetItems = new ArrayList<>(),
             seatCountItems = new ArrayList<>();
-    protected String category,min_year,max_year,max_mileage,min_price,max_price,model,make,type,seat_count;
+    static ArrayList<Object> yearSetItems = new ArrayList<>();
+    static ArrayList<Integer> mileageSetItems = new ArrayList<>();
+    protected String category,min_price,max_price,model,make,type,seat_count;
+    protected int min_year, max_year;
+    protected double max_mileage;
+    protected FilterContent tempFilterContent = new FilterContent();
+
     
     protected InventorySearchBuild() {
     	this.setSize(2000, 1000);
