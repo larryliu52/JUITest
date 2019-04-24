@@ -1,24 +1,24 @@
 package dto;
 
-public class Vehicle {
+public class Vehicle extends Object{
 	
 private String vehicleId;
 	
 	private String category;
 	
-	private String year;
+	private int year;
 	
 	private String make;
 	
 	private String type;
 	
-	private String seatCount;
+	private int seatCount;
 	
-	private String mileage;
+	private int mileage;
 	
 	private String price;
 	
-	private String zipCode;
+	private int zipCode;
 	
 	private String model;
 	
@@ -46,11 +46,11 @@ private String vehicleId;
 		this.category = category;
 	}
 
-	public String getYear() {
+	public int getYear() {
 		return year;
 	}
 
-	public void setYear(String year) {
+	public void setYear(int year) {
 		this.year = year;
 	}
 
@@ -70,20 +70,20 @@ private String vehicleId;
 		this.type = type;
 	}
 
-	public String getSeatCount() {
+	public int getSeatCount() {
 		return seatCount;
 	}
 
-	public void setSeatCount(String seatCount) {
+	public void setSeatCount(int seatCount) {
 		this.seatCount = seatCount;
 	}
 
-	public String getMileage() {
+	public int getMileage() {
 		return mileage;
 	}
 
-	public void setMileage(String mileage) {
-		this.mileage = mileage;
+	public void setMileage(int milaege) {
+		this.mileage = milaege;
 	}
 
 	public String getPrice() {
@@ -94,11 +94,11 @@ private String vehicleId;
 		this.price = price;
 	}
 
-	public String getZipCode() {
+	public int getZipCode() {
 		return zipCode;
 	}
 
-	public void setZipCode(String zipCode) {
+	public void setZipCode(int zipCode) {
 		this.zipCode = zipCode;
 	}
 }

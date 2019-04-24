@@ -4,6 +4,10 @@ import java.util.Collection;
 
 public class Inventory {
 
+	/*public Inventory(String dealerId){
+		this.dealerId = dealerId;
+	}*/
+
 	private String vehicleId;
 	
 	private String dealerId;
