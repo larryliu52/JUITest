@@ -1,4 +1,5 @@
 package UI;
+
 import database.*;
 import javax.swing.*;
 import java.awt.*;
@@ -139,6 +140,7 @@ class SearchFrame extends JFrame {
     JPanel LeftPanel, RightPanel;
     JRadioButton New, Used, All;
     JButton SearchButton, AddButton, ModifyButton, DeleteButton;
+    //String vehicleId;      //need for ModifyCarUI
 
     //Constructor
     public SearchFrame(String DealerName) {
@@ -313,10 +315,17 @@ class SearchFrame extends JFrame {
             }
 
         });
-
+        
+        
+        /*
+         * need a parameter(String vehicleId) for ModifyCarUI's constructer.
+           We can create an attribute in SearchFrame, to store the vehicleId which user click on,
+           Once they click on another vehicle, reset the attribute,
+           when they click on ModifyButton, pass it to this method as an attribute
+        **/
         ModifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                new ModifyCarUI();
+                new ModifyCarUI("V1");  
                 //dispose();
             }
         });

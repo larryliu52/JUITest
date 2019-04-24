@@ -406,6 +406,7 @@ public class InventorySearch extends InventorySearchBuild{
                 JBSearch.doClick();
             }
         });
+
     }
 
 
