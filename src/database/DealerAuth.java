@@ -26,7 +26,7 @@ public class DealerAuth {
             Properties prop=new Properties();
             prop.load(input);
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection(URL, prop.getProperty("USER"), prop.getProperty("PASS"));
+            Connection conn = DriverManager.getConnection(URL, prop.getProperty("username"), prop.getProperty("password"));
 
             PreparedStatement statement = conn.prepareStatement("SELECT DISTINCT Dealerid from  dbo.Inventory where Dealerid=?");
             statement.setString(1, dealerid);

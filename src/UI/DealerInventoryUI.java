@@ -1,11 +1,16 @@
 package UI;
 
 import database.*;
+import dto.Vehicle;
+import service.InventorySearch.InventorySearcherImplement;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class DealerInventoryUI {
     DealerLogin login= new DealerLogin();
@@ -127,7 +132,7 @@ class DealerLogin extends JFrame {
         //setUndecorated(true);
         //AWTUtilities.setWindowOpacity(this, (float)(0.86));
         setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(EXIT_ON_CLOSE);
     }
 }
 
@@ -136,18 +141,25 @@ class SearchFrame extends JFrame {
     DealerAuth dAuth=new DealerAuth();
 
     Container container = getContentPane();
-    String DealerName;
+    String dealerId;
     JPanel LeftPanel, RightPanel;
     JRadioButton New, Used, All;
     JButton SearchButton, AddButton, ModifyButton, DeleteButton;
+    JComboBox modelCB;
+    JComboBox makeCB;
+    List<Vehicle> vehiclesCollection, tempVehicle;
+    JPanel List1;
+    ButtonGroup ListGroup = new ButtonGroup();
+    List<ListPanel> listPanels = new ArrayList<>();
     //String vehicleId;      //need for ModifyCarUI
 
     //Constructor
-    public SearchFrame(String DealerName) {
+    public SearchFrame(String dealerId) {
         container.setLayout(null);
-        this.DealerName = DealerName;
+        this.dealerId = dealerId;
+        this.vehiclesCollection = new DatabaseConnection().getVehiclesForDealer(this.dealerId);
         CreateLeftPanel();
-        CreateRightPanel();
+        CreateRightPanel(this.vehiclesCollection);
         ButtonAction();
         SetBackground();
         SetWindow();
@@ -161,7 +173,7 @@ class SearchFrame extends JFrame {
 
         JPanel LabelPanel = new JPanel();
         LabelPanel.setOpaque(false);
-        JLabel CurrentDealerName = new JLabel(DealerName, JLabel.CENTER);
+        JLabel CurrentDealerName = new JLabel(dealerId, JLabel.CENTER);
         CurrentDealerName.setFont(new Font("Arial", Font.BOLD, 32));;
         LabelPanel.add(CurrentDealerName);
         LabelPanel.setBounds(0, 120, 640, 60);
@@ -198,8 +210,10 @@ class SearchFrame extends JFrame {
        // List modelList= (vehicleObj.getModel().toArray();
       //  String[] makeList= (String[])vehicleObj.getMake().toArray();
 
-        JComboBox modelCB = new JComboBox(vehicleObj.getModel().toArray());
-        JComboBox makeCB = new JComboBox(vehicleObj.getMake().toArray());
+        modelCB = new JComboBox(vehicleObj.getModel().toArray());
+        makeCB = new JComboBox(vehicleObj.getMake().toArray());
+        makeCB.addItem("");
+        modelCB.addItem("");
         modelCB.setFocusable(false);
         makeCB.setFocusable(false);
         FilterPanelRight.add(modelCB);
@@ -242,23 +256,25 @@ class SearchFrame extends JFrame {
 
 
     //Create right part panel
-    private void CreateRightPanel() {
+    private void CreateRightPanel(List<Vehicle> vehiclesCollection) {
         RightPanel = new JPanel();
         RightPanel.setOpaque(false);
         RightPanel.setLayout(null);
 
         JPanel TopList = new JPanel(null);
         TopList.setOpaque(false);
-        JPanel List = new JPanel(null);
-        List.setLayout(new BoxLayout(List, BoxLayout.Y_AXIS));
-        ButtonGroup ListGroup = new ButtonGroup();
-        for(int i=1 ; i<16 ; i++){
-            ListPanel resultPanel = new ListPanel();
+        List1 = new JPanel(null);
+        List1.setLayout(new BoxLayout(List1, BoxLayout.Y_AXIS));
+//        ButtonGroup ListGroup = new ButtonGroup();
+        /*for(int i=0 ; i<vehiclesCollection.size() ; i++){
+            ListPanel resultPanel = new ListPanel(vehiclesCollection.get(i));
             ListGroup.add(resultPanel.select);
             List.add(resultPanel);
-        }
-        List.setFont(new Font("Courier New", Font.BOLD ,24));
-        JScrollPane ListPane = new JScrollPane(List);
+        }*/
+
+        addList(vehiclesCollection);
+        List1.setFont(new Font("Courier New", Font.BOLD ,24));
+        JScrollPane ListPane = new JScrollPane(List1);
         ListPane.setBounds(50, 20, 800, 600);
         TopList.add(ListPane);
 
@@ -285,12 +301,24 @@ class SearchFrame extends JFrame {
         RightPanel.setBounds(640, 0, 960, 900);
         container.add(RightPanel);
     }
+    private void addList(List<Vehicle> vehiclesCollection){
+        List1.removeAll();
+        for(int i=0;i<vehiclesCollection.size();i++){
+            ListPanel resultPanel = new ListPanel(vehiclesCollection.get(i));
+            ListGroup.add(resultPanel.select);
+            List1.add(resultPanel);
+            listPanels.add(resultPanel);
+        }
+        List1.revalidate();
+    }
 
     //Write search button logic here
     private void ButtonAction() {
         SearchButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
-
+                InventorySearcherImplement implement = new InventorySearcherImplement();
+                tempVehicle = implement.searchInventory(vehiclesCollection, getFilterValue());
+                addList(tempVehicle);
             }
           });
 
@@ -300,14 +328,14 @@ class SearchFrame extends JFrame {
 //
 //            }
 //        });
-        DeleteButton.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent ae) {
-                new DeleteCarUI();
-                //dispose();
+        DeleteButton.addActionListener(e -> {
+            List1.revalidate();//to update the status of jradiobutton, most important thing here
+            for(int i=0; i<listPanels.size(); i++){
+                if(listPanels.get(i).select.isSelected()){
+                    new DeleteCarUI(listPanels.get(i).resultVehicleID.getText());
+                }
             }
-
         });
-
         AddButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
                 new AddCarUI();
@@ -325,11 +353,46 @@ class SearchFrame extends JFrame {
         **/
         ModifyButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent ae) {
-                new ModifyCarUI("V1");  
-                //dispose();
+                List1.revalidate();//to update the status of jradiobutton, most important thing here
+                for(int i=0; i<listPanels.size(); i++){
+                    if(listPanels.get(i).select.isSelected()){
+                        new ModifyCarUI(listPanels.get(i).resultVehicleID.getText());
+                    }
+                }
             }
         });
     }
+
+    private FilterContent getFilterValue() {
+        FilterContent filtercontent = new FilterContent();
+        //Category
+        if(New.isSelected()) {
+            filtercontent.setNeedNew(true);
+        }
+        else {
+            filtercontent.setNeedUsed(false);
+        }
+        if(Used.isSelected()) {
+            filtercontent.setNeedUsed(true);
+        }
+        else{
+            filtercontent.setNeedUsed(false);
+        }
+        if(All.isSelected()){
+            filtercontent.setNeedUsed(true);
+            filtercontent.setNeedNew(true);
+        }
+        //Make
+        filtercontent.setMake((String)makeCB.getSelectedItem());
+        //Model
+        filtercontent.setModel((String)modelCB.getSelectedItem());
+
+        return filtercontent;
+    }
+
+
+
+
 
     //Set window background
     private void SetBackground() {
@@ -353,7 +416,7 @@ class SearchFrame extends JFrame {
         int screenHeight = screenSize.height;
         this.setLocation(screenWidth/2-windowWidth/2, screenHeight/2-windowHeight/2);
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 }
 
@@ -362,22 +425,22 @@ class ListPanel extends JPanel{
     JLabel resultVehicleID, resultPrice, resultLocation, resultMake, resultYear, resultMileage, resultCondition;
     JRadioButton select;
 
-    public ListPanel() {
+    public ListPanel(Vehicle vehicle) {
         setBorder(BorderFactory.createEmptyBorder(20,10,20,20));
-        createComponents();
+        createComponents(vehicle);
         addComponents();
     }
 
-    private void createComponents(){
+    private void createComponents(Vehicle vehicle){
         select = new JRadioButton();
         select.setOpaque(false);
-        resultVehicleID = new JLabel("VehicleId: ");
-        resultCondition = new JLabel("Condition: ");
-        resultLocation = new JLabel("Location: ");
-        resultMake = new JLabel("Make: ");
-        resultMileage = new JLabel("Mileage: ");
-        resultYear = new JLabel("Year: ");
-        resultPrice = new JLabel("Price: ");
+        resultVehicleID = new JLabel("VehicleId: "+vehicle.getVehicleId());
+        resultCondition = new JLabel("Condition: "+vehicle.getCategory());
+        resultLocation = new JLabel("Location: "+vehicle.getZipCode());
+        resultMake = new JLabel("Make: "+vehicle.getMake());
+        resultMileage = new JLabel("Mileage: "+vehicle.getMileage());
+        resultYear = new JLabel("Year: "+vehicle.getYear());
+        resultPrice = new JLabel("Price: "+vehicle.getPrice());
         select.setPreferredSize(new Dimension(50, 50));
         resultVehicleID.setPreferredSize(new Dimension(100,50));
         resultPrice.setPreferredSize(new Dimension(100,50));

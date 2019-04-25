@@ -98,7 +98,7 @@ public class AddCarUI extends JFrame {
         setSize(900, 1800);
         setTitle("Add Page");
         setVisible(true);
-        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        //setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     void addListeners(){
@@ -112,11 +112,11 @@ public class AddCarUI extends JFrame {
                 String USER = "";
                 String PASS = "";
                 try {
-                    InputStream input = new FileInputStream("DB.properties");
+                    InputStream input = new FileInputStream("src/database/connection.properties");
                     Properties prop = new Properties();
                     prop.load(input);
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    Connection conn = DriverManager.getConnection(URL, prop.getProperty("USER"), prop.getProperty("PASS"));
+                    Connection conn = DriverManager.getConnection(URL, prop.getProperty("username"), prop.getProperty("password"));
 
                     PreparedStatement p = conn.prepareStatement("select * from  dbo.Vehicle WHERE Vehicleid ="+"'"+VehicleIdText.getText()+"'");
                     ResultSet r=p.executeQuery();

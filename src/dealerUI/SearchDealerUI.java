@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import javax.swing.*;
 import javax.swing.border.TitledBorder;
 
+import UI.DealerInventoryUI;
 import dto.Dealer;
 import searchDealerLogic.SearchDealerResult;
 
@@ -125,6 +126,9 @@ public class SearchDealerUI extends JFrame{
 					nameText.setEnabled(false);
 			    }
 			}
+		});
+		dealerInventory.addActionListener(e -> {
+			new DealerInventoryUI();
 		});
 		
 	}

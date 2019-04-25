@@ -19,11 +19,11 @@ public class VehiclesSearchResult {
     public List getMake() {
         List makeList=new ArrayList<String>();
         try {
-            InputStream input = new FileInputStream("DB.properties");
+            InputStream input = new FileInputStream("src/database/connection.properties");
             Properties prop=new Properties();
             prop.load(input);
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection(URL, prop.getProperty("USER"), prop.getProperty("PASS"));
+            Connection conn = DriverManager.getConnection(URL, prop.getProperty("username"), prop.getProperty("password"));
 
             PreparedStatement statement =conn.prepareStatement("SELECT DISTINCT Make from  dbo.vehicle" );
             ResultSet rs = statement.executeQuery();
@@ -43,11 +43,11 @@ public class VehiclesSearchResult {
 
         // GetMakeandModel makeandModel = new GetMakeandModel();
         try {
-            InputStream input = new FileInputStream("DB.properties");
+            InputStream input = new FileInputStream("src/database/connection.properties");
             Properties prop=new Properties();
             prop.load(input);
             Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-            Connection conn = DriverManager.getConnection(URL, prop.getProperty("USER"), prop.getProperty("PASS"));
+            Connection conn = DriverManager.getConnection(URL, prop.getProperty("username"), prop.getProperty("password"));
 
             PreparedStatement statement =conn.prepareStatement("SELECT DISTINCT Model from  dbo.vehicle" );
             ResultSet rs = statement.executeQuery();

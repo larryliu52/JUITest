@@ -16,8 +16,8 @@ import javax.swing.JRadioButton;
 public class SingleDealerPanelUI extends JPanel{
 	
 	private JButton clickForDetails;
-	private JLabel name, url, phoneNumber, zipcode, address,distance;
-	private JRadioButton radioButton3;
+	public JLabel name, url, phoneNumber, zipcode, address,distance;
+	public JRadioButton radioButton3;
 	SearchDealerResult disSearchResult = new SearchDealerResult();
 	
 	public SingleDealerPanelUI(Dealer dealer) {

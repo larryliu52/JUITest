@@ -61,10 +61,10 @@ public class InventorySearcherImplement implements InventorySearcher{
 		return type.equals(vehicleType);
 	}
 
-	public boolean fitSeatCount(Vehicle vehicle, String seatCount) {
+	public boolean fitSeatCount(Vehicle vehicle, int seatCount) {
 		int vehicleSeatCount = vehicle.getSeatCount();
-		if (seatCount == null || seatCount.length() == 0) return true;
-		return seatCount.equals(vehicleSeatCount);
+		if (seatCount == 0) return true;
+		return seatCount==vehicleSeatCount;
 	}
 
 //	for testing;

@@ -17,18 +17,18 @@ public class DeleteCarUI extends JFrame{
     Font f=new Font("Arial", Font.BOLD, 20);
     JButton OkayButton=new JButton("OK");
     JButton CancelButton=new JButton("Cancel");
-    JLabel label=new JLabel("Vehicleid:");
-    JLabel label2 = new JLabel("V41");
+    JLabel label=new JLabel("Vehicle ID:");
+    JLabel label2 = new JLabel();
 
-    public DeleteCarUI(){
-        CreateAddComponent();
+    public DeleteCarUI(String vehicleId){
+        CreateAddComponent(vehicleId);
         AddButton();
         SetWindow();
         ButtonListener();
     }
 
-    void CreateAddComponent() {
-
+    void CreateAddComponent(String vehicleId) {
+        label2.setText(vehicleId);
         delcontainer.setLayout(new BorderLayout());
         delcontainer.setBackground(new Color(244, 167, 66));
         delcontainer.add(panel,BorderLayout.CENTER);
@@ -80,7 +80,7 @@ public class DeleteCarUI extends JFrame{
         this.setLocation(screenWidth/2-windowWidth/2, screenHeight/2-windowHeight/2);
 
         setTitle("Confirm Delete");
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setVisible(true);
 
     }
@@ -98,11 +98,11 @@ public class DeleteCarUI extends JFrame{
                 String PASS = "";
 
                 try {
-                    InputStream input = new FileInputStream("DB.properties");
+                    InputStream input = new FileInputStream("src/database/connection.properties");
                     Properties prop = new Properties();
                     prop.load(input);
                     Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
-                    Connection conn = DriverManager.getConnection(URL, prop.getProperty("USER"), prop.getProperty("PASS"));
+                    Connection conn = DriverManager.getConnection(URL, prop.getProperty("username"), prop.getProperty("password"));
 
                     PreparedStatement p = conn.prepareStatement("select * from  dbo.Inventory WHERE Vehicleid =" + "'" + label2.getText() + "'");
                     ResultSet r = p.executeQuery();
@@ -113,11 +113,11 @@ public class DeleteCarUI extends JFrame{
 
                         ps.executeUpdate();
                         JOptionPane.showMessageDialog(null, "Vehicle Successfully Deleted from Inventory");
-                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                     } else {
                         JOptionPane.showMessageDialog(null, "Vehicle not available in Inventory");
-                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+//                        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
                     }
 
@@ -135,9 +135,10 @@ public class DeleteCarUI extends JFrame{
         CancelButton.addActionListener(new ActionListener() {
 
             public void actionPerformed(ActionEvent c) {
-                DealerLogin dui=new DealerLogin();
+                /*DealerLogin dui=new DealerLogin();
                 SearchFrame sf=new SearchFrame(dui.DealerNameText.getText());
-                sf.setVisible(true);
+                sf.setVisible(true);*/
+                dispose();
             }
 
         });
